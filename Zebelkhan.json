@@ -1,0 +1,31 @@
+<?php
+
+header('Content-type: application/json');
+
+function httpGet($url)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($ch,CURLOPT_HEADER, 0);
+    $headers = array();
+    $headers[] = "User-Agent: v2rayNG/2.0.3";
+    $headers[] = "Connection: close";
+
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+
+    $output=curl_exec($ch);
+    curl_close($ch);
+    return $output;
+}
+
+
+$bevpn = httpGet("https://servers.astms.com/api/sub?v=2.0.3&ref=bevpn.net");
+$json = json_decode($bevpn);
+$data = str_replace('\n',"\n",$json->data);
+die($data);
+
+
+?>
